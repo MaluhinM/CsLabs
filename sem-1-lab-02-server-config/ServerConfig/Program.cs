@@ -1,8 +1,8 @@
 ﻿namespace ServerConfig;
 
-public partial class Program
+public class Program
 {
-    public static
+    static
     (
         bool connected, bool initialized, bool running,
         bool updating, bool restoring, bool backupCreated,
@@ -25,7 +25,7 @@ public partial class Program
         );
     }
 
-    public static void PrintServerInfo
+    static void PrintServerInfo
     (
         bool connected, bool initialized, bool running,
         bool updating, bool restoring, bool backupCreated,
