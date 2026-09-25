@@ -1,8 +1,8 @@
 ﻿namespace ServerConfig;
 
-class Program
+public partial class Program
 {
-    static
+    public static
     (
         bool connected, bool initialized, bool running,
         bool updating, bool restoring, bool backupCreated,
@@ -25,7 +25,7 @@ class Program
         );
     }
 
-    static void PrintServerInfo
+    public static void PrintServerInfo
     (
         bool connected, bool initialized, bool running,
         bool updating, bool restoring, bool backupCreated,
@@ -74,16 +74,16 @@ class Program
         Console.ResetColor();
     }
 
-    static (int state, List<string> FatalExceptions, List<string> Warnings) HandleServerInfo
+    public static (int state, List<string> FatalExceptions, List<string> Warnings) HandleServerInfo
     (
         bool connected, bool initialized, bool running,
         bool updating, bool restoring, bool backupCreated,
         bool changesTested, uint ping, uint lastCleanupDays
     )
     {
+        int state;
         List<string> FatalExceptions = [];
         List<string> Warnings = [];
-        int state;
 
         if (!connected) FatalExceptions.Add("Unable to establish a connection to the server");
         else if (!initialized) FatalExceptions.Add("The server cannot be initialized");
