@@ -12,16 +12,13 @@ internal class Program
 
         index1 = line.IndexOf('[', index2 + 1) + 1;
         index2 = line.IndexOf(']', index1);
-
         string level = line.Substring(index1, index2 - index1);
 
         index1 = line.IndexOf('[', index2 + 1) + 1;
         index2 = line.IndexOf(']', index1);
-
         string type = line.Substring(index1, index2 - index1);
 
         index1 = line.IndexOf(' ', index2 + 1) + 1;
-
         string text = line.Substring(index1);
 
         return (dateTime, level, type, text);
@@ -29,7 +26,7 @@ internal class Program
 
     public static void Main()
     {
-        string[] lines = File.ReadAllLines("../../../event_server.log");
+        string[] lines = File.ReadAllLines("event_server.log");
         string viewLevel = "Warning";  // Info, Warning or Error
 
         foreach (string line in lines)
