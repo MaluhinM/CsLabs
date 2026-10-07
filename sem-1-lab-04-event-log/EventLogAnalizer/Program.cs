@@ -88,7 +88,7 @@ public class Program
         return result;
     }
 
-    public static uint CountByLevel(LogEntry[] entries, string level)
+    public static uint CountByLevel(IEnumerable<LogEntry> entries, string level)
     {
         uint count = 0;
         foreach (LogEntry entry in entries)
@@ -101,7 +101,7 @@ public class Program
 
     public static string GetServerStatus(LogEntry[] entries)
     {
-        if (CountByLevel(FilterByCategory(entries, "Server").ToArray(), "Fatal") > 0)
+        if (CountByLevel(FilterByCategory(entries, "Server"), "Fatal") > 0)
             return "КРИТИЧЕСКАЯ ОШИБКА: сервер остановлен";
         bool haveError = CountByLevel(entries, "Error") > 0;
         bool haveFatal = CountByLevel(entries, "Fatal") > 0;
