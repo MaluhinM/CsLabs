@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="EventLogAnalizer/EventLogAnalizer.csproj" />
+  <Project Path="EventLogAnalizer_Tests/EventLogAnalizer_Tests.csproj" />
+</Solution>
