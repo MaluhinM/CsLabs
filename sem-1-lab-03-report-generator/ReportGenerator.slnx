@@ -1,2 +1,4 @@
 <Solution>
+  <Project Path="ReportGenerator/ReportGenerator.csproj" />
+  <Project Path="ReportGeneratorTests/ReportGeneratorTests.csproj" />
 </Solution>

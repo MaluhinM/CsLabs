@@ -2,7 +2,7 @@
 
 namespace ReportGenerator;
 
-class Program
+public class Program
 {
     public static (DateTime, string, string, string) GetLogParts(string line)
     {
@@ -31,14 +31,21 @@ class Program
         string eventName = "Восстание Ледяного Пламени";
         string startPoint = $"Событие началось: {eventName}";
         string endPoint = $"Событие \"{eventName}\" закрыто";
-        string winnerPattern = $"объявлены победителями события \"{eventName}\"";
+
+        string winnerPattern = @$"(?<winner>[\w\s]+) объявлены победителями события ""{eventName}""";
+        string awardPattern = @$"(?<awardRecipient>[\w\s]+) получили утешительную награду: (?<awardScore>\d+) очков события";
+        string victoryWinnerPattern = @$"Игрок (?<victoryWinner>[\w\s]+) победил (?<victoryNumber>\d+) враг[а,ов]";
 
         bool eventStarted = false;
         DateTime startDateTime = DateTime.MinValue;
         TimeSpan duration = TimeSpan.MinValue;
         string winner = "<undefined>";
+        string awardRecipient = "<undefined>";
+        uint awardScore = 0;
         uint warningCount = 0;
         uint errorCount = 0;
+        string victoryWinner = "<undefined>";
+        uint victoryNumber = 0;
 
         foreach (string line in logs)
         {
@@ -50,8 +57,34 @@ class Program
                     duration = dateTime - startDateTime;
                     break;
                 }
-                if (type == "Reward" && text.Contains(winnerPattern))
-                    winner = text[..(text.IndexOf(winnerPattern) - 1)];
+                if (type == "Reward")
+                {
+                    Match match = Regex.Match(text, winnerPattern);
+                    if (match.Success)
+                        winner = match.Groups["winner"].Value;
+                    else
+                    {
+                        match = Regex.Match(text, awardPattern);
+                        if (match.Success)
+                        {
+                            awardRecipient = match.Groups["awardRecipient"].Value;
+                            awardScore = uint.Parse(match.Groups["awardScore"].Value);
+                        }
+                    }
+                }
+                else if (type == "Statistics")
+                {
+                    Match match = Regex.Match(text, victoryWinnerPattern);
+                    if (match.Success)
+                    {
+                        uint number = uint.Parse(match.Groups["victoryNumber"].Value);
+                        if (number > victoryNumber)
+                        {
+                            victoryWinner = match.Groups["victoryWinner"].Value;
+                            victoryNumber = number;
+                        }
+                    }
+                }
                 if (level == "Warning") warningCount += 1;
                 else if (level == "Error") errorCount += 1;
             }
@@ -68,16 +101,25 @@ class Program
         if (!eventStarted)
             throw new InvalidDataException("Не было встречено лога начала события");
 
-        string scorePattern = @$"{winner} получили (\d+) очков события";
+        string winnerScorePattern = @$"{winner} получили (?<winnerScore>\d+) очков события";
+        string eventItemPattern = @$"{winner} получили ивентовый предмет: (?<eventItem>[\w\s]+)";
+
         uint winnerScore = 0;
+        string eventItem = "<undefined>";
         foreach (string line in logs)
         {
             (DateTime dateTime, string level, string type, string text) = GetLogParts(line);
             if (type == "Reward")
             {
-                Match match = Regex.Match(text, scorePattern);
+                Match match = Regex.Match(text, winnerScorePattern);
                 if (match.Success)
-                    winnerScore = uint.Parse(match.Groups[1].Value);
+                    winnerScore = uint.Parse(match.Groups["winnerScore"].Value);
+            }
+            else if (type == "Loot")
+            {
+                Match match = Regex.Match(text, eventItemPattern);
+                if (match.Success)
+                    eventItem = match.Groups["eventItem"].Value;
             }
         }
 
@@ -88,6 +130,12 @@ class Program
             Продолжительность: {duration}
             Победитель: {winner}
             Очки победителя: {winnerScore}
+            Ивентовый предмет: {eventItem}
+            Утешительная награда {awardRecipient}: {awardScore} очков
+            Предупреждений во время события: {warningCount}
+            Ошибок во время события: {errorCount}
+
+            Игрок {victoryWinner} стал лидером по количеству побед: {victoryNumber} шт. врагов
             """;
         return report;
     }
