@@ -45,32 +45,32 @@ public class Program
         }
         string jsonString = File.ReadAllText(indexPath);
 
-        List<SaveEntry>? jsonData = [];
+        List<SaveEntry>? jsonData;
         try
         {
             jsonData = JsonConvert.DeserializeObject<List<SaveEntry>>(jsonString);
         }
         catch (JsonReaderException ex)
         {
-            Console.WriteLine($"Ошибка парсинга JSON: {ex.Message}");
+            PrintError($"Ошибка парсинга JSON: {ex.Message}");
             indexData = [];
             return false;
         }
         catch (JsonSerializationException ex)
         {
-            Console.WriteLine($"Ошибка сериализации/приведения типа: {ex.Message}");
+            PrintError($"Ошибка сериализации/приведения типа: {ex.Message}");
             indexData = [];
             return false;
         }
         catch (JsonException ex)
         {
-            Console.WriteLine($"Ошибка Json.NET: {ex.Message}");
+            PrintError($"Ошибка Json.NET: {ex.Message}");
             indexData = [];
             return false;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Непредвиденная ошибка: {ex.Message}");
+            PrintError($"Непредвиденная ошибка: {ex.Message}");
             indexData = [];
             return false;
         }
@@ -91,44 +91,44 @@ public class Program
         if (!Path.Exists(filePath))
         {
             PrintError($"ОШИБКА: Файла {filePath} не существует");
-            saveData = new SaveData();
+            saveData = new();
             return false;
         }
         string jsonString = File.ReadAllText(filePath);
-        SaveData? jsonData = new();
+        SaveData? jsonData;
         try
         {
             jsonData = JsonConvert.DeserializeObject<SaveData>(jsonString);
         }
         catch (JsonReaderException ex)
         {
-            Console.WriteLine($"Ошибка парсинга JSON: {ex.Message}");
-            saveData = new SaveData();
+            PrintError($"Ошибка парсинга JSON: {ex.Message}");
+            saveData = new();
             return false;
         }
         catch (JsonSerializationException ex)
         {
-            Console.WriteLine($"Ошибка сериализации/приведения типа: {ex.Message}");
-            saveData = new SaveData();
+            PrintError($"Ошибка сериализации/приведения типа: {ex.Message}");
+            saveData = new();
             return false;
         }
         catch (JsonException ex)
         {
-            Console.WriteLine($"Ошибка Json.NET: {ex.Message}");
-            saveData = new SaveData();
+            PrintError($"Ошибка Json.NET: {ex.Message}");
+            saveData = new();
             return false;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Непредвиденная ошибка: {ex.Message}");
-            saveData = new SaveData();
+            PrintError($"Непредвиденная ошибка: {ex.Message}");
+            saveData = new();
             return false;
         }
 
         if (jsonData is null)
         {
             PrintError($"ОШИБКА: Не удалось обработать файл {filePath}");
-            saveData = new SaveData();
+            saveData = new();
             return false;
         }
         saveData = jsonData;
@@ -184,6 +184,21 @@ public class Program
         Console.ResetColor();
     }
 
+    public static bool FindByName(List<SaveEntry> entries, string name, out SaveEntry saveData)
+    {
+        foreach (SaveEntry entry in entries)
+        {
+            if (entry.Name == name)
+            {
+                saveData = entry;
+                return true;
+            }
+        }
+        PrintError($"ОШИБКА: Сохранения с именем \"{name}\" не существует");
+        saveData = new();
+        return false;
+    }
+
     public static void Main()
     {
         if (!LoadIndex("../../../index.json", out List<SaveEntry> indexData))
@@ -191,7 +206,11 @@ public class Program
             Console.WriteLine("Не удалось корректно обработать файл index.json");
             return;
         }
-        SaveEntry saveSlot = indexData[0];
+        if (!FindByName(indexData, "slot-01", out SaveEntry saveSlot))
+        {
+            Console.WriteLine("Не удалось найти сохранение");
+            return;
+        }
         if (!LoadSave("../../../saves/", saveSlot, out SaveData saveData))
         {
             Console.WriteLine($"Не удалось корректно обработать сохранение {saveSlot.Name} в файле {saveSlot.File}");
