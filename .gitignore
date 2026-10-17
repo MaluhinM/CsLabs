@@ -6,6 +6,7 @@
 # Приколы от MXRMVL
 dotnet*
 .vscode/*
+*.zip
 
 # User-specific files
 *.rsuser

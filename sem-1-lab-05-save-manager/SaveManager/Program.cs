@@ -416,12 +416,13 @@ public class Program
         {
             Console.WriteLine(
                 """
+
                 Выберите номер операции:
                     1. Показать список сохранений.
                     2. Посмотреть данные сохранения.
                     3. Изменить данные персонажа и записать их обратно.
                     4. Создать резервную копию.
-                    5. Восстановить резервную копию.
+                    5. Восстановить из резервной копии.
                     6. Удалить сохранение.
                     7. Выйти.
                 """
@@ -465,16 +466,16 @@ public class Program
                             break;
                         }
 
-                        string mapEnter = GetString($"Карта [{saveData.Map}]:");
+                        string mapEnter = GetString($"Карта [{saveData.Map}]: ");
                         if (!string.IsNullOrEmpty(mapEnter))
                             saveData.Map = mapEnter;
-                        string xEnter = GetString($"Координата x [{saveData.Position.Xpos}]:");
+                        string xEnter = GetString($"Координата x [{saveData.Position.Xpos}]: ");
                         if (!string.IsNullOrEmpty(xEnter) && int.TryParse(xEnter, out int xNum))
                             saveData.Position.Xpos = xNum;
-                        string yEnter = GetString($"Координата y [{saveData.Position.Ypos}]:");
+                        string yEnter = GetString($"Координата y [{saveData.Position.Ypos}]: ");
                         if (!string.IsNullOrEmpty(yEnter) && int.TryParse(yEnter, out int yNum))
                             saveData.Position.Ypos = yNum;
-                        string healthEnter = GetString($"Здоровье [{saveData.Health}]:");
+                        string healthEnter = GetString($"Здоровье [{saveData.Health}]: ");
                         if (!string.IsNullOrEmpty(healthEnter) && int.TryParse(healthEnter, out int healthNum))
                             saveData.Health = healthNum;
 
