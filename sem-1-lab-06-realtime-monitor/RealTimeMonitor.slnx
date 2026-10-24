@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="RealTimeMonitor/RealTimeMonitor.csproj" />
+  <Project Path="RealTimeMonitor_Tests/RealTimeMonitor_Tests.csproj" />
+</Solution>
