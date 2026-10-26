@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DirectoryTree/DirectoryTree.csproj" />
+  <Project Path="DirectoryTree_Tests/DirectoryTree_Tests.csproj" />
+</Solution>
