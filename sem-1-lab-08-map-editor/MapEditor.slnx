@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MapEditor/MapEditor.csproj" />
+  <Project Path="MapEditor_Tests/MapEditor_Tests.csproj" />
+</Solution>
