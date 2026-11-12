@@ -17,7 +17,7 @@ public record struct Player(Position Position);
 
 public record class Snapshot(Player Player, Cell[,] Grid)
 {
-    public Position PlayerPosition { get; set; } = Player.Position;
+    public Position PlayerPosition { get; init; } = Player.Position;
 }
 
 class OutOfBoundsException : Exception

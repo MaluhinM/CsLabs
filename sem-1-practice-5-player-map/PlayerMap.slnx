@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PlayerMap/PlayerMap.csproj" />
+  <Project Path="PlayerMap_Tests/PlayerMap_Tests.csproj" />
+</Solution>
