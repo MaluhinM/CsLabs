@@ -11,11 +11,13 @@
         return input;
     }
 
-    public static int GetNumber(string prompt)
+    public static int? GetNumber(string prompt)
     {
         while (true)
         {
             string input = GetString(prompt);
+            if (string.IsNullOrEmpty(input))
+                return null;
             bool success = int.TryParse(input, out int result);
             if (success)
                 return result;
