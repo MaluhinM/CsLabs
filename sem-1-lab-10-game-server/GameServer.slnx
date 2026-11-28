@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="GameServer/GameServer.csproj" />
+  <Project Path="GameServer_Tests/GameServer_Tests.csproj" />
+  <Project Path="ServerClocking/ServerClocking.csproj" />
+</Solution>
